@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+            body {
+                background-image: url("multi.jpg");
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-color: white;
+                color: black;
+            }
+            .quiz-container {
+                background-color: white;
+                padding: 20px;
+                border-radius: 10px;
+            }
+        .quiz-container {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        h2, p {
+            margin: 10px 0;
+        }
+        button {
+            margin: 5px;
+        }
+
+/* Style the taskbar */
+.taskbar {
+    background-color: black;
+    overflow: hidden;
+  }
+
+  /* Style the taskbar links */
+  .taskbar a {
+    float: left;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+
+  /* Change the color of the active taskbar link */
+  .taskbar a.active {
+    background-color: #4CAF50;
+  }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="r&c.jpg" alt="Logo" width="50" height="50">
+        <a href="index.html">Quiz</a>
+        <a href="scratch.html">Asteroids</a>
+        <a href="catch.html">Catch</a>
+        <a href="pokemon.html">Pokemon</a>
+        <a href="pong.html">Pong</a>
+        <a href="contact.html">Contact</a>
+
+      </div>
+
+    <div class="quiz-container">
+        <h2 id="question"></h2>
+        <div id="choices"></div>
+        <button onclick="checkAnswer()">Next</button>
+
+    </div>
+
+    <script>
+        var currentQuestionIndex = 0;
+        var score = 0;
+
+        var questions = [
+        "In what year was the first arcade machine, 'Computer Space,' released?",
+        "Which iconic arcade game introduced the concept of power-ups?",
+        "Who developed the first successful commercial video game, Pong?",
+        "Which game is credited with popularizing the use of joysticks in arcades?",
+        "What was the name of the first arcade game to feature a scrolling background?",
+        "Which game introduced the concept of multiplayer cooperative play?",
+        "What was the first arcade game to use a light gun controller?",
+        "Which game was the first to incorporate digitized speech?",
+        "What popular arcade game featured a protagonist named 'Jumpman' before he became known as Mario?",
+        "Which game is often credited with starting the 'Golden Age of Arcade Games' in the late 1970s?",
+        "What was the first arcade game to feature a recognizable character and a storyline?",
+        "Which game introduced the concept of 'combo' moves?",
+        "What was the first arcade game to use 3D polygon graphics?",
+        "Which game popularized the use of trackballs as a control mechanism?",
+        "What was the first arcade game to have a full-color, high-resolution, raster display?",
+        "Which game was the first to introduce the concept of 'easter eggs' (hidden surprises or messages)?",
+        "What was the first arcade game to feature multiple endings based on player performance?",
+        "Which game is often credited with popularizing the 'beat 'em up' genre?",
+        "What was the first game to use isometric graphics in arcade machines?",
+        "Which game introduced the concept of using a light gun to shoot at on-screen targets?",
+        "What was the first arcade game to feature voice synthesis?",
+        "Which game was the first to feature digitized actors in its gameplay?",
+        "What was the first game to use a trackball for player control?",
+        "Which game is considered the first successful multiplayer fighting game?",
+        "What was the first game to introduce the concept of a 'boss fight' at the end of each level?"
+    ];
+
+        var choices = [
+            ["1971", "1980", "1962", "1978"],
+            ["Pac-Man", "Space Invaders", "Galaga", "Donkey Kong"],
+            ["Nolan Bushnell", "Shigeru Miyamoto", "Ralph Baer", "Hideo Kojima"],
+            ["Street Fighter 2", "Mortal Kombat", "Asteroids", "Space Wars"],
+            ["Defender", "Galaxia", "Moon Patrol", "Centipede"],
+            ["Gauntlet", "Rampage", "Joust", "Double Dragon"],
+            ["Duck Hunt", "Time Crisis", "Operation Wolf", "Virtua Cop"],
+            ["Pac-Man", "Asteroids", "Dragon's Lair", "Space Ace"],
+            ["Donkey Kong", "Pac-Man", "Super Mario Bros.", "Galaga"],
+            ["Pong", "Space Invaders", "Asteroids", "Pac-Man"],
+            ["Space Invaders", "Pac-Man", "Donkey Kong", "Asteroids"],
+            ["Street Fighter 2", "Tekken", "Mortal Kombat", "SoulCalibur"],
+            ["Pole Position", "Star Wars", "Battlezone", "Space Harrier"],
+            ["Centipede", "Missile Command", "Marble Madness", "Golden Tee"],
+            ["Pong", "Galaxian", "Asteroids", "Space Invaders"],
+            ["Donkey Kong", "Pac-Man", "Joust", "Frogger"],
+            ["Dragon's Lair", "Galaga", "Tron", "Robotron: 2084"],
+            ["Double Dragon", "Final Fight", "Golden Axe", "Street Fighter"],
+            ["Q*bert", "Zaxxon", "Marble Madness", "Super Sprint"],
+            ["Time Crisis", "House of the Dead", "Lethal Enforcers", "Operation Wolf"],
+            ["Asteroids", "Galaxian", "Lunar Lander", "Warlords"],
+            ["Dragon's Lair", "Star Wars", "Golden Axe", "Time Traveler"],
+            ["Centipede", "Marble Madness", "Arkanoid", "Crystal Castles"],
+            ["Street Fighter", "Mortal Kombat", "Double Dragon", "Tekken"],
+            ["Donkey Kong", "Pac-Man", "Galaga", "Space Invaders"],
+        ];
+
+        var answers = [0, 1, 0, 2, 0, 0, 2, 2, 2, 1, 2, 2, 3, 3, 2, 1, 0, 3, 0, 0, 0, 3, 1, 2, 1];
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            var questionElement = document.getElementById("question");
+            questionElement.textContent = questions[currentQuestionIndex];
+
+            var choicesElement = document.getElementById("choices");
+            choicesElement.innerHTML = "";
+
+            for (var i = 0; i < choices[currentQuestionIndex].length; i++) {
+                var choiceButton = document.createElement("button");
+                choiceButton.textContent = choices[currentQuestionIndex][i];
+                choiceButton.setAttribute("onclick", "checkAnswer(" + i + ")");
+                choicesElement.appendChild(choiceButton);
+            }
+        }
+
+        function checkAnswer(choiceIndex) {
+            if (choiceIndex === answers[currentQuestionIndex]) {
+                score++;
+            }
+
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex === questions.length) {
+                displayResults();
+            } else {
+                displayQuestion();
+            }
+        }
+
+        function displayResults() {
+            var quizContainer = document.querySelector(".quiz-container");
+            quizContainer.innerHTML = "";
+
+            var resultHeader = document.createElement("h2");
+            resultHeader.textContent = "Quiz Results";
+            quizContainer.appendChild(resultHeader);
+
+            var scoreText = document.createElement("p");
+            scoreText.textContent = "Your score: " + score + " out of " + questions.length;
+            quizContainer.appendChild(scoreText);
+
+        }
+
+        startQuiz();
+    </script>
+</body>
+</html>
